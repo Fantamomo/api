@@ -1,0 +1,21 @@
+vanish:
+  __prefix__: "&6[&bVanish&6] "
+  __prefix_at__: ["*"]
+  prefix: "&6[&bVanish&6] "
+  on: "&aDu bist im Vanish modus!"
+  off: "&cDu bist nicht mehr im Vanish modus!"
+  item:
+    on: "&eDu kannst nun Item aufheben!"
+    off: "&eDu kannst nun keine Item aufheben!"
+  wrong:
+    player: "&cDer spieler ist ungültig"
+    players: "&cDie Spieler sind ungültig"
+  players: "&9Vanish Players: "
+  hide: "&eDer Spieler &6%player1% &ekann nun nicht mehr den Spieler &6%player2% &esehen!"
+  hide_for_you: "&eDu kannst nun nicht mehr den Spieler &6%player1% &esehen!"
+  show: "&eDer Spieler &6%player1% &ekann nun wieder den Spieler &6%player2% &esehen!"
+  show_for_you: "&eDu kannst nun wieder den Spieler &6%player1% &esehen!"
+  no_body: "&aDich kann niemand sehen!"
+  no_body_other: "&a%player% kann niemand sehen!"
+  can_see: "&cDich können Spieler %size% sehen: \n%players%"
+  can_see_other: "&c%player% können Spieler %size% sehen: \n%players%"

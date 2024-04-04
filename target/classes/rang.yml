@@ -1,0 +1,69 @@
+# Standard Ränge Konfiguration
+
+owner:
+  name: '&aOwner'
+  chatMSG: '%prefix% %player_color%%player%&9: %msg_color%%msg%'
+  prefix: '&6[&aOwner&6]'
+  msg_color: '&6'
+  player_color: '&a'
+  prioritiat: 700
+  joinMSG: '%prefix% %player% &6hat das Spiel betreten'
+  joinFireWork: false
+  quitMSG: '%prefix% %player% &6hat das Spiel verlassen'
+  suffix: " &4the best"
+admin:
+  name: '&cADMIN'
+  chatMSG: '%prefix% %player_color%%player%: %msg_color%%msg%'
+  prefix: '&6[&cADMIN&6]'
+  msg_color: '&f'
+  player_color: '&c'
+  prioritiat: 600
+  joinMSG: '%prefix% %player% &chat das Spiel betreten'
+  joinFireWork: false
+  quitMSG: '%prefix% %player% &6hat das Spiel verlassen'
+builder:
+  name: 'BUILDER'
+  chatMSG: '%prefix% %player_color%%player%: %msg_color%%msg%'
+  prefix: '&2[Builder]'
+  msg_color: '&f'
+  player_color: '&2'
+  prioritiat: 500
+  joinMSG: '%prefix% %player% hat das Spiel betreten'
+  joinFireWork: false
+  quitMSG: '%prefix% %player% &6hat das Spiel verlassen'
+elite:
+  chatMSG: '%prefix% %player_color%%player%: %msg_color%%msg%'
+  prefix: '&5[Elite]'
+  msg_color: '&f'
+  player_color: '&5'
+  prioritiat: 400
+  joinMSG: '%prefix% %player% hat das Spiel betreten'
+  joinFireWork: false
+  quitMSG: '%prefix% %player% &7hat das Spiel verlassen'
+mvp:
+  chatMSG: '%prefix% %player_color%%player%: %msg_color%%msg%'
+  prefix: '&1[MVP]'
+  msg_color: '&f'
+  player_color: '&1'
+  prioritiat: 300
+  joinMSG: '%prefix% %player% hat das Spiel betreten'
+  joinFireWork: false
+  quitMSG: '%prefix% %player% &7hat das Spiel verlassen'
+vip:
+  chatMSG: '%prefix% %player_color%%player%: %msg_color%%msg%'
+  prefix: '&6[VIP]'
+  msg_color: '&f'
+  player_color: '&6'
+  prioritiat: 200
+  joinMSG: '%prefix% %player% hat das Spiel betreten'
+  joinFireWork: false
+  quitMSG: '%prefix% %player% &7hat das Spiel verlassen'
+default:
+  chatMSG: '%prefix% %player_color%%player%: %msg_color%%msg%'
+  prefix: ''
+  msg_color: '&f'
+  player_color: '&7'
+  prioritiat: 100
+  joinMSG: '%prefix% %player% hat das Spiel betreten'
+  joinFireWork: false
+  quitMSG: '%prefix% %player% &7hat das Spiel verlassen'
