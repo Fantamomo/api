@@ -1,0 +1,79 @@
+owner:
+  name: "<gradient:#ff0000:#8b0000>Owner</gradient>"
+  priority: 1000
+  prefix: "<dark_red>[OWNER]</dark_red>"
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<red>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#ff0000>"
+
+admin:
+  name: "<gradient:#ff5555:#ff0000>Admin</gradient>"
+  priority: 900
+  prefix: "<red>[ADMIN]</red>"
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<red>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#ff5555>"
+
+moderator:
+  name: "<gradient:#0000ff:#00008b>Moderator</gradient>"
+  priority: 800
+  prefix: "<blue>[MOD]</blue>"
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<blue>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#0000ff>"
+
+builder:
+  name: "<gradient:#00ff00:#006400>Builder</gradient>"
+  priority: 700
+  prefix: "<dark_green>[BUILDER]</dark_green>"
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<dark_green>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#00ff00>"
+
+elite:
+  name: "<gradient:#800080:#4b0082>Elite</gradient>"
+  priority: 600
+  prefix: "<dark_purple>[ELITE]</dark_purple>"
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<dark_purple>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#800080>"
+
+premium:
+  name: "<gradient:#ff4500:#ff8c00>Premium</gradient>"
+  priority: 500
+  prefix: "<gold>[PREMIUM]</gold>"
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<gold>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#ffa500>"
+
+vip:
+  name: "<gradient:#ffff00:#ffd700>VIP</gradient>"
+  priority: 400
+  prefix: "<yellow>[VIP]</yellow>"
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<yellow>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#ffff00>"
+
+default:
+  name: "<gradient:#d3d3d3:#a9a9a9>Default</gradient>"
+  priority: -1
+  prefix: ""
+  suffix: ""
+  join-msg: "<gold>{display-name} <green>ist dem Spiel beigetreten</green></gold>"
+  quit-msg: "<gold>{display-name} <red>hat das Spiel verlassen</red></gold>"
+  chat-msg: "<gray>{display-name}<gray>: {msg}</gray>"
+  player-name-color: "<#ffffff>"

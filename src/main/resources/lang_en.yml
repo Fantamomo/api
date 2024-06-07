@@ -1,0 +1,57 @@
+command:
+  usage: "<dark_red>Usage: {usage}"
+  need_to_be_player: "<dark_red>You need to be a Player!"
+  player_not_found: "<dark_red>Player was not found"
+  permission_error: "<dark_red>You don't habe the right permission ({perm})"
+commands:
+  nick:
+    prefix: "<gold>[<green>NICK<gold>]<reset> "
+    usage: "<dark_red>Usage: {usage}"
+    illegal_argument: "<dark_red>Illegal argument at pos {pos} -> {argument}"
+    player_not_found: "<dark_red>Player was not found"
+    permission_error: "<dark_red>You don't habe the right permission ({perm})"
+    need_to_be_player: "<dark_red>You need to be a Player!"
+    not-available: "<dark_red>This nick name is not available!"
+    success-self: "<green>You are now nicked as <gold>{nick-name}<reset>"
+    success-other: "<green>The Player <aqua>{original-name} <green>is now nicked as <gold>{nick-name}<reset>"
+    not-nicked-other: "<dark_red>The Player is not nicked"
+    not-nicked-self: "<dark_red>You are not nicked"
+    info: "<green>The Player <aqua>{original-name}<green> is nicked as <gold>{nick-name}<reset>"
+    reset-self: "<green>You are now unnicked<reset>"
+    set-fake-rang: "<green>You fake rang is now {rang}"
+    reset-other: "<red>You reset the nick of the player <gold>{nick-name}<red>(<aqua>{original-name}<red>)<reset>"
+    list:
+      start: "<yellow>Nicked Players: <reset>"
+      format: "<gold>{nick-name}<red>(<aqua>{original-name}<red>)<reset>"
+  set-language:
+    prefix: "<gold>[<dark_red>LANGUAGE<gold>] <reset>"
+    not-exist: "<dark_red>This language does not exist"
+    info: "<green>Your current language is \"<gold>{lang}<green>\""
+    success: "<green>Your language is set to \"<gold>{lang}<green>\""
+  tell:
+    prefix: ""
+    msg-revive: "<green>{sender} <gold>-> <green>YOU: <gray>{msg}"
+    msg-send: "<green>YOU <gold>-> <green>{reviver}: <gray>{msg}"
+  user:
+    prefix: "<gold>[<red>USER<gold>]"
+    usage: "<dark_red>Usage: {usage}"
+    player_not_found: "<dark_red>Player was not found"
+    not_a_number: "The {arg} argument is not a number"
+    wrong_argument: "The {arg} argument is tab completed, please use one of the completion"
+    priority-set: "The priority of {var} is now {value}"
+    mute.reset: "You unmute the Player {player-name}<reset>"
+    mute.set: "You mute the Player {player-name}. Reason: {reason}"
+  perm:
+    prefix: "<gold>[<blue>PERM<gold>]"
+    usage: "<dark_red>Usage: {usage}"
+    set: "<green>The permission {perm} of {player-name} is now {state}"
+    info-single: "<green>The permission of Player {player-name}<green> is set to <gold>{state}"
+    info-single-unset: "<green>The permission is not set by Player {player-name}"
+chat:
+  hover:
+    vanish: "<aqua>The Player is vanish!"
+    nick: "<green>The Player's real name is <gold>{original-name}!<reset>"
+    mute: "<red>This Player is muted!<newline>Reason: {reason}"
+    info: "<green>Player name: <gold>{player-name}<newline><green>Player UUID: <gold>{player-uuid}<newline><green>Player Pos: <gold>{player-pos}"
+    chat-user-manage: "<blue>Click here manage the Player"
+  mute-error: "<dark_red>You are muted, you can not send a chat message"

@@ -1,0 +1,52 @@
+command:
+  usage: "<dark_red>Verwendung: {usage}"
+  need_to_be_player: "<dark_red>Du musst ein Spieler sein!"
+  player_not_found: "<dark_red>Spieler wurde nicht gefunden"
+  permission_error: "<dark_red>Du hast nicht die erforderliche Berechtigung ({perm})"
+commands:
+  nick:
+    prefix: "<gold>[<green>NICK<gold>]<reset> "
+    usage: "<dark_red>Verwendung: {usage}"
+    illegal_argument: "<dark_red>Ungültiges Argument an Position {pos} -> {argument}"
+    player_not_found: "<dark_red>Spieler wurde nicht gefunden"
+    permission_error: "<dark_red>Du hast nicht die erforderliche Berechtigung ({perm})"
+    not-available: "<dark_red>Dieser Spitzname ist nicht verfügbar!"
+    success-self: "<green>Du bist jetzt als <gold>{nick-name} <green>benannt"
+    success-other: "<green>Der Spieler <aqua>{original-name} <green>ist jetzt als <gold>{nick-name} <green>benannt"
+    not-nicked-other: "<dark_red>Der Spieler hat keinen Spitznamen"
+    not-nicked-self: "<dark_red>Du bist nicht benannt"
+    info: "<green>Der Spieler <aqua>{original-name} <green>hat den Spitznamen <gold>{nick-name}"
+    reset-self: "<green>Du hast deinen Spitznamen zurückgesetzt"
+    reset-other: "<red>Du hast den Spitznamen des Spielers <gold>{nick-name} <red>zurückgesetzt (<aqua>{original-name}<red>)"
+    list:
+      start: "<yellow>Benannte Spieler: <reset>"
+      format: "<gold>{nick-name} <red>(<aqua>{original-name}<red>)<reset>"
+  set-language:
+    prefix: "<gold>[<dark_red>SPRACHE<gold>]<reset>"
+    not-exist: "<dark_red>Diese Sprache existiert nicht"
+    info: "<green>Deine aktuelle Sprache ist \"<gold>{lang}<green>\""
+    success: "<green>Deine Sprache wurde auf \"<gold>{lang}<green>\" gesetzt"
+  tell:
+    prefix: ""
+    msg-revive: "<green>{sender} <gold>-> <green>DICH: <gray>{msg}"
+    msg-send: "<green>Du <gold>-> <green>{reviver}: <gray>{msg}"
+  user:
+    prefix: "<gold>[<red>BENUTZER<gold>]"
+    usage: "<dark_red>Verwendung: {usage}"
+    player_not_found: "<dark_red>Spieler wurde nicht gefunden"
+    not_a_number: "Das {arg}-Argument ist keine Zahl"
+    wrong_argument: "Das {arg}-Argument wird automatisch vervollständigt. Bitte verwende eine der Vervollständigungen"
+    priority-set: "Die Priorität von {var} ist jetzt {value}"
+    mute.reset: "Du hast den Spieler {player-name} entstummt"
+    mute.set: "Du hast den Spieler {player-name} stummgeschaltet. Grund: {reason}"
+  perm:
+    prefix: "<gold>[<blue>BERECHTIGUNG<gold>]"
+    usage: "<dark_red>Verwendung: {usage}"
+    set: "<green>Die Berechtigung {perm} von {player-name} ist jetzt {state}"
+chat:
+  hover:
+    vanish: "<aqua>Der Spieler ist unsichtbar!"
+    nick: "<green>Der echte Name des Spielers ist <gold>{original-name}!"
+    mute: "<red>Dieser Spieler ist stummgeschaltet!<new_line>Grund: {reason}"
+    info: "<green>Spielername: <gold>{player-name}<newline><green>Spieler UUID: <gold>{player-uuid}<newline><green>Spieler Pos: <gold>{player-pos}"
+  mute-error: "<dark_red>Du bist stummgeschaltet, du kannst keine Chatnachricht senden"
