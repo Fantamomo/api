@@ -1,13 +1,10 @@
 package at.leisner.api.rang;
 
 import at.leisner.api.API;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +32,9 @@ public class RangManager {
             String chatMsg = config.getString(key + ".chat-msg", "{display-name}&9: {msg}");
             String playerNameColor = config.getString(key + ".player-name-color", "<#FFFFFF>");
 
-            Rang rang = new Rang(name,
+            Rang rang = new Rang(
+                    key,
+                    name,
                     priority,
                     plugin.miniMessage().deserialize(prefix),
                     plugin.miniMessage().deserialize(suffix),
@@ -52,7 +51,7 @@ public class RangManager {
         return rangMap.get(id);
     }
 
-    public Set<String> availableRangs() {
+    public Set<String> availableRanks() {
         return rangMap.keySet();
     }
 }

@@ -77,7 +77,7 @@ public class PermissionCommand extends Command {
     @Override
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
         if (args.length == 1) {
-            return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+            return Bukkit.getOnlinePlayers().stream().filter(player -> !(sender instanceof Player p) || p.canSee(player)).map(Player::getName).toList();
         } else if (args.length == 2) {
             List<String> arg1 = new ArrayList<>();
             if (sender.hasPermission("api.command.perm.set")) arg1.add("set");

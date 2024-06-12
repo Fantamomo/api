@@ -28,7 +28,7 @@ public class RangCommand extends Command {
         if (args.length == 1) {
             return List.of("set", "info");
         } else if (args.length == 2) {
-            return plugin.getRangManager().availableRangs().stream().toList();
+            return plugin.getRangManager().availableRanks().stream().toList();
         } else if (args.length == 3) {
             if (args[0].equals("set")) {
                 return List.of("priority", "prefix", "suffix", "chat-msg", "join-msg", "quit-msg", "name", "player-name-color");

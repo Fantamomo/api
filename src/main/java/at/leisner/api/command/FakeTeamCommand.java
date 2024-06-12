@@ -17,7 +17,7 @@ public class FakeTeamCommand extends Command {
     public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] args) {
         Player player1 = Bukkit.getPlayerExact(args[0]);
         Player player2 = Bukkit.getPlayerExact(args[1]);
-        NMSUtils.setFakePlayerTeam(player1, player2, args.length > 2 ? Component.literal(args[2]) : null, args.length > 3 ? Component.literal(args[3]) : null);
+        NMSUtils.sendFakePlayerTeam(player1, player2, args.length > 2 ? Component.literal(args[2]) : null, args.length > 3 ? Component.literal(args[3]) : null);
         return false;
     }
 }

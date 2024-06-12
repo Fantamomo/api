@@ -4,9 +4,8 @@ import at.leisner.api.API;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 
-import java.awt.Color;
-
 public class Rang {
+    private final String id;
     private String name;
     private int priority;
     private Component prefix;
@@ -14,10 +13,11 @@ public class Rang {
     private Component joinMsg;
     private Component quitMsg;
     private Component chatMsg;
-    private TextColor playerNameColor; // "int;int;int" format or color name
+    private TextColor playerNameColor;
     private final API plugin;
 
-    public Rang(String name, int priority, Component prefix, Component suffix, Component joinMsg, Component quitMsg, Component chatMsg, TextColor playerNameColor) {
+    public Rang(String id, String name, int priority, Component prefix, Component suffix, Component joinMsg, Component quitMsg, Component chatMsg, TextColor playerNameColor) {
+        this.id = id;
         this.name = name;
         this.priority = priority;
         this.prefix = prefix;
@@ -91,5 +91,8 @@ public class Rang {
 
     public TextColor getPlayerNameColor() {
         return playerNameColor;
+    }
+    public String id() {
+        return id;
     }
 }

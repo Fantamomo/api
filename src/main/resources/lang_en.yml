@@ -23,6 +23,9 @@ commands:
     list:
       start: "<yellow>Nicked Players: <reset>"
       format: "<gold>{nick-name}<red>(<aqua>{original-name}<red>)<reset>"
+    set-skin: "You skin is now set to {skin}"
+    reload-skin: "You can now see your custom skin"
+    real-skin: "You can now see your real skin"
   set-language:
     prefix: "<gold>[<dark_red>LANGUAGE<gold>] <reset>"
     not-exist: "<dark_red>This language does not exist"
@@ -48,6 +51,7 @@ commands:
     info-single: "<green>The permission of Player {player-name}<green> is set to <gold>{state}"
     info-single-unset: "<green>The permission is not set by Player {player-name}"
 chat:
+  prefix: "<gold>[<blue>CHAT<gold>]<reset>"
   hover:
     vanish: "<aqua>The Player is vanish!"
     nick: "<green>The Player's real name is <gold>{original-name}!<reset>"

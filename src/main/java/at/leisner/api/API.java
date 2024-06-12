@@ -7,15 +7,21 @@ import at.leisner.api.listener.ChatListener;
 import at.leisner.api.listener.JoinQuitListener;
 import at.leisner.api.nick.NickCommand;
 import at.leisner.api.nick.NickManager;
-import at.leisner.api.permission.PermissionManager;
 import at.leisner.api.rang.RangManager;
+import at.leisner.api.tablist.TabListManager;
+import at.leisner.api.user.User;
+import at.leisner.api.util.JsonUtil;
+import at.leisner.api.vanish.VanishCommand;
+import at.leisner.api.vanish.VanishManager;
+import com.google.gson.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -28,18 +34,46 @@ public final class API extends JavaPlugin {
     private Language language;
     private List<String> languages = List.of("en", "de");
     private MiniMessage miniMessage;
-    private PermissionManager permissionManager;
+    private TabListManager tabListManager;
+    private VanishManager vanishManager;
+//    private PermissionManager permissionManager;
+    private Gson gson;
 
 
     @Override
     public void onEnable() {
         plugin = this;
         miniMessage = MiniMessage.miniMessage();
-        manageFile();
+        gson = new GsonBuilder().setPrettyPrinting().create();
+        loadManageFile();
         register();
+        loadManageFileLater();
+        registerPlayers();
     }
 
-    private void manageFile() {
+    private void loadManageFileLater() {
+        try (Reader reader = new FileReader(new File(getDataFolder(), "player.json"))) {
+            JsonElement json = JsonParser.parseReader(reader);
+            if (json != null) {
+                for (JsonElement jsonElement : json.getAsJsonArray()) {
+                    if (jsonElement == null || jsonElement.isJsonNull()) {
+                        continue;
+                    }
+                    JsonUtil.USER.deserializer(jsonElement);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void registerPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            User.of(player);
+        }
+    }
+
+    private void loadManageFile() {
         getDataFolder().mkdir();
         saveResource("lang_en.yml", true);
         saveResource("rang.yml", true);
@@ -66,6 +100,10 @@ public final class API extends JavaPlugin {
         );
     }
 
+    public VanishManager getVanishManager() {
+        return vanishManager;
+    }
+
     private void register() {
         CommandMap commandMap = getServer().getCommandMap();
         commandMap.registerAll("api", List.of(
@@ -78,23 +116,29 @@ public final class API extends JavaPlugin {
                 new PermissionCommand(this),
                 new IgnoreCommand(this),
                 new ReportCommand(this),
-                new PlayerInfoCommand(this)
+                new PlayerInfoCommand(this),
+                new VanishCommand(this)
         ));
 
         nickManager = new NickManager(this);
         rangManager = new RangManager(this);
         rangManager.loadRangs(getTextResource("rang.yml"));
-        permissionManager = new PermissionManager(this, new File(getDataFolder(), "permission.dat"));
-        permissionManager.loadPermissions();
+//        permissionManager = new PermissionManager(this, new File(getDataFolder(), "permission.dat"));
+//        permissionManager.loadPermissions();
 
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new ChatListener(this), this);
         pluginManager.registerEvents(new JoinQuitListener(this), this);
+        tabListManager = new TabListManager(this);
+        tabListManager.run();
+        vanishManager = new VanishManager(this);
     }
 
     @Override
     public void onDisable() {
-        permissionManager.savePermissions();
+        User.saveUser(new File(getDataFolder(), "player.json"));
+//        permissionManager.savePermissions();
+
     }
 
     public static API getInstance() {
@@ -117,7 +161,15 @@ public final class API extends JavaPlugin {
         return miniMessage;
     }
 
-    public PermissionManager getPermissionManager() {
-        return permissionManager;
+//    public PermissionManager getPermissionManager() {
+//        return permissionManager;
+//    }
+
+    public Gson getGson() {
+        return gson;
+    }
+
+    public TabListManager getTabListManager() {
+        return tabListManager;
     }
 }

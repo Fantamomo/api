@@ -4,8 +4,11 @@ import at.leisner.api.API;
 import at.leisner.api.lang.Key;
 import at.leisner.api.lang.Language;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class CommandSenderUser {
     private final CommandSender sender;
@@ -47,6 +50,9 @@ public class CommandSenderUser {
     public Player player() {
         return player;
     }
+    public User user() {
+        return user;
+    }
     public String getNameFor(Player forPlayer) {
         if (player != null) return user.getDisplayNameFor(forPlayer);
         return "SERVER";
@@ -59,5 +65,19 @@ public class CommandSenderUser {
         if (hasPermission(permission)) return true;
         sendMessage(translateKey, Key.of("perm", permission));
         return false;
+    }
+    public boolean isPlayer() {
+        return sender instanceof Player;
+    }
+
+    public List<Player> playersAreSeen() {
+        return (List<Player>) Bukkit.getOnlinePlayers().stream().filter(player -> !(sender instanceof Player p) || p.canSee(player)).toList();
+    }
+    public List<String> playersAreSeenName() {
+        return playersAreSeen().stream().map(Player::getName).toList();
+    }
+    public boolean canSee(Player p) {
+        if (!isPlayer()) return true;
+        return playersAreSeen().contains(p);
     }
 }

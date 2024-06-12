@@ -9,6 +9,7 @@ import at.leisner.api.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -166,6 +167,41 @@ public class NickCommand extends Command {
                     }
                 }
             }
+            case "set_skin" -> {
+                if (!sender.controlPermission("api.command.nick.set_skin", "commands.nick.permission_error")) return true;
+                if (!sender.isPlayer()) {
+                    sender.sendMessage("commands.nick.need_to_be_player");
+                    return true;
+                }
+                if (args.length == 2) {
+                    String newSkin = args[1];
+                    if (plugin.getNickManager().isPlayerNicked(sender.player())) {
+                        plugin.getNickManager().changeSkin(sender.user().getServerPlayer().gameProfile, newSkin);
+                        sender.sendMessage("commands.nick.set-skin", Key.of("skin", newSkin));
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (p.canSee(sender.player())) {
+                                p.hidePlayer(plugin, sender.player());
+                                p.showPlayer(plugin, sender.player());
+                            }
+                        }
+                        return true;
+                    }
+                    sender.sendMessage("commands.nick.not-nicked-self");
+                }
+            }
+            case "reload_skin" -> {
+                if (!sender.controlPermission("api.command.nick.reload_skin", "commands.nick.permission_error")) return true;
+                if (!sender.isPlayer()) {
+                    sender.sendMessage("commands.nick.need_to_be_player");
+                    return true;
+                }
+                plugin.getNickManager().reloadPlayer((CraftPlayer) sender.player());
+                if (plugin.getNickManager().isPlayerNicked(sender.player())) {
+                    sender.sendMessage("commands.nick.reload-skin");
+                } else {
+                    sender.sendMessage("commands.nick.real-skin");
+                }
+            }
             default -> sender.sendMessage("commands.nick.illegal_argument", Key.of("pos", "1"), Key.of("argument", args[0]));
         }
         return true;
@@ -183,12 +219,15 @@ public class NickCommand extends Command {
             if (sender.hasPermission("api.command.nick.set_other")) completion.add("set_other");
             if (sender.hasPermission("api.command.nick.fake_rang")) completion.add("fake_rang");
             if (sender.hasPermission("api.command.nick.random")) completion.add("random");
-            return completion;
+            if (sender.hasPermission("api.command.nick.reload_skin")) completion.add("reload_skin");
+            if (sender.hasPermission("api.command.nick.set_skin")) completion.add("set_skin");
+            return completion.stream().filter(arg -> arg.startsWith(args[0])).toList();
         }
         if (!sender.hasPermission("api.command.nick." + args[0])) return new ArrayList<>();
         switch (args[0]) {
             case "set":
             case "list":
+            case "reload_skin":
                 break;
             case "info":
             case "set_other":
@@ -200,7 +239,7 @@ public class NickCommand extends Command {
                     return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             case "fake_rang":
                 if (args.length == 3) return new ArrayList<>();
-                return plugin.getRangManager().availableRangs().stream().toList();
+                return plugin.getRangManager().availableRanks().stream().filter(arg -> arg.startsWith(args[2])).toList();
         }
         return new ArrayList<>();
     }

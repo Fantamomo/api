@@ -47,7 +47,7 @@ public class UserCommand extends Command {
                 User user = User.of(player);
                 if (args[1].equals("set")) {
                     if (args[2].equals("rang")) {
-                        if (plugin.getRangManager().availableRangs().contains(args[3])) {
+                        if (plugin.getRangManager().availableRanks().contains(args[3])) {
                             user.setRang(plugin.getRangManager().getRang(args[3]));
                         }
                     }
@@ -107,7 +107,7 @@ public class UserCommand extends Command {
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
         switch (args.length) {
             case 1 -> {
-                return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+                return Bukkit.getOnlinePlayers().stream().filter(player -> !(sender instanceof Player p) || p.canSee(player)).map(Player::getName).toList();
             }
             case 2 -> {
                 return List.of("set", "info");
@@ -119,7 +119,7 @@ public class UserCommand extends Command {
                 if (args[1].equals("set")) {
                     switch (args[2]) {
                         case "rang" -> {
-                            return plugin.getRangManager().availableRangs().stream().toList();
+                            return plugin.getRangManager().availableRanks().stream().toList();
                         }
                         case "language" -> {
                             return Language.availableLanguages().stream().toList();

@@ -23,15 +23,15 @@ public class JoinQuitListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        PermissionAttachment attachment = player.addAttachment(plugin);
-        plugin.getPermissionManager().getPlayerPermissionAttachmentMap().put(player, attachment);
+//        PermissionAttachment attachment = player.addAttachment(plugin);
+//        plugin.getPermissionManager().getPlayerPermissionAttachmentMap().put(player, attachment);
         User user = User.of(player);
 
-        // Lade die Berechtigungen aus der Datenbank und setze sie für den Spieler
-        Map<String, Boolean> permissions = user.getPermissions();
-        for (Map.Entry<String, Boolean> entry : permissions.entrySet()) {
-            attachment.setPermission(entry.getKey(), entry.getValue());
-        }
+//        // Lade die Berechtigungen aus der Datenbank und setze sie für den Spieler
+//        Map<String, Boolean> permissions = user.getPermissions();
+//        for (Map.Entry<String, Boolean> entry : permissions.entrySet()) {
+//            attachment.setPermission(entry.getKey(), entry.getValue());
+//        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
