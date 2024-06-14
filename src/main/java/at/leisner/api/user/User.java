@@ -6,6 +6,7 @@ import at.leisner.api.lang.Language;
 import at.leisner.api.rang.Rang;
 import at.leisner.api.rang.RangManager;
 import at.leisner.api.util.NMSUtils;
+import at.leisner.api.vanish.VanishPlayerData;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,7 +36,7 @@ public class User implements Serializable {
     private Rang rang;
     private final UUID uuid;
     private transient final Set<Player> playersThatSeeNick = new HashSet<>();
-    public boolean isVanish = false;
+    public VanishPlayerData vanishPlayerData;
     private Language language;
     private Component status;
     public int nickSeePriority = 0;
@@ -132,6 +133,16 @@ public class User implements Serializable {
         }
 
         User user = User.of(originalName, uuid);
+        user.nickName = null;
+        user.vanishUsePriority = 0;
+        user.vanishSeePriority = 0;
+        user.nickSeePriority = 0;
+        user.nickUsePriority = 0;
+        user.language = Language.defaultLang;
+        user.rang = RangManager.defaultRang;
+        user.fakeRang = RangManager.defaultRang;
+        user.money = 0;
+        user.vanishPlayerData = new VanishPlayerData(user);
 
         if (jsonObject.has("nickName")) {
             user.nickName = jsonObject.get("nickName").getAsString();
@@ -145,8 +156,11 @@ public class User implements Serializable {
         if (jsonObject.has("rang")) {
             user.rang = plugin.getRangManager().getRang(jsonObject.get("rang").getAsString());
         }
-        if (jsonObject.has("isVanish")) {
-            user.isVanish = jsonObject.get("isVanish").getAsBoolean();
+        if (jsonObject.has("vanish")) {
+            JsonObject vanishObject = jsonObject.getAsJsonObject("vanish");
+            boolean vanishState = vanishObject.has("state") && vanishObject.get("state").getAsBoolean();
+            boolean itemPickUp = vanishObject.has("canPickUpItems") && vanishObject.get("canPickUpItems").getAsBoolean();
+            user.vanishPlayerData = new VanishPlayerData(user, vanishState, itemPickUp);
         }
         if (jsonObject.has("language")) {
             user.language = Language.getLanguage(jsonObject.get("language").getAsString());
@@ -197,29 +211,37 @@ public class User implements Serializable {
     public JsonElement toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("originalName", originalName);
-        jsonObject.addProperty("nickName", nickName);
-        jsonObject.addProperty("fakeRang", fakeRang.id());
-        jsonObject.addProperty("money", money);
-        jsonObject.addProperty("rang", rang.id());
         jsonObject.addProperty("uuid", uuid.toString());
-        jsonObject.addProperty("isVanish", isVanish);
-        jsonObject.addProperty("language", language.name);
-        jsonObject.addProperty("mute", mute);
 
-        JsonObject priorityObject = new JsonObject();
+        if (nickName != null && nickName.isEmpty()) jsonObject.addProperty("nickName", nickName);
+        if (fakeRang != RangManager.defaultRang) jsonObject.addProperty("fakeRang", fakeRang.id());
+        if (money != 0) jsonObject.addProperty("money", money);
+        if (rang != RangManager.defaultRang) jsonObject.addProperty("rang", rang.id());
+        if (vanishPlayerData != null && (vanishPlayerData.isVanish()) || vanishPlayerData.canPickUpItems()) {
+            JsonObject vanishObject = new JsonObject();
+            if (vanishPlayerData.isVanish()) vanishObject.addProperty("state", vanishPlayerData.isVanish());
+            if (vanishPlayerData.canPickUpItems()) vanishObject.addProperty("canPickUpItems", vanishPlayerData.canPickUpItems());
+            jsonObject.add("vanish", vanishObject);
+        }
+        if (language != Language.defaultLang) jsonObject.addProperty("language", language.name);
+        if (mute != null) jsonObject.addProperty("mute", mute);
 
-        JsonObject seeObject = new JsonObject();
-        seeObject.addProperty("nick", nickSeePriority);
-        seeObject.addProperty("vanish", vanishSeePriority);
-
-        JsonObject useObject = new JsonObject();
-        useObject.addProperty("nick", nickUsePriority);
-        useObject.addProperty("vanish", vanishUsePriority);
-
-        priorityObject.add("see", seeObject);
-        priorityObject.add("use", useObject);
-
-        jsonObject.add("priority", priorityObject);
+        if (vanishUsePriority != 0 || vanishSeePriority != 0 || nickUsePriority != 0 || nickSeePriority != 0) {
+            JsonObject priorityObject = new JsonObject();
+            if (vanishSeePriority != 0 || nickSeePriority != 0) {
+                JsonObject seeObject = new JsonObject();
+                seeObject.addProperty("nick", nickSeePriority);
+                seeObject.addProperty("vanish", vanishSeePriority);
+                priorityObject.add("see", seeObject);
+            }
+            if (vanishSeePriority != 0 || nickSeePriority != 0) {
+                JsonObject useObject = new JsonObject();
+                useObject.addProperty("nick", nickUsePriority);
+                useObject.addProperty("vanish", vanishUsePriority);
+                priorityObject.add("use", useObject);
+            }
+            jsonObject.add("priority", priorityObject);
+        }
 
         return jsonObject;
     }
@@ -306,7 +328,7 @@ public class User implements Serializable {
         TextComponent.Builder displayName;
         Component prefix = getCurrentRang().prefix().isEmpty() ? Component.empty() : getCurrentRang().getPrefix();
         TextComponent name = NMSUtils.addHoverEvent(Component.text(getCurrentName()).color(getCurrentRang().playerNameColor()), this, User.of(forPlayer));
-        if (!forPlayer.hasPermission("api.chat.hover.player-info")) {
+        if (forPlayer != null && !forPlayer.hasPermission("api.chat.hover.player-info")) {
             name = Component.text(getCurrentName()).color(getCurrentRang().playerNameColor());
         }
         Component suffix = getCurrentRang().suffix().isEmpty() ? Component.empty() : getCurrentRang().getSuffix();
@@ -314,7 +336,7 @@ public class User implements Serializable {
         TextComponent vanishComponent = Component.empty();
         TextComponent nickComponent = Component.empty();
 
-        if (isVanish) {
+        if (vanishPlayerData.isVanish()) {
             vanishComponent = Component.text("[V]").color(TextColor.color(0, 255, 255))
                     .hoverEvent(HoverEvent.showText(plugin.miniMessage().deserialize(language.translate("chat.hover.vanish"))));
         }
@@ -369,7 +391,7 @@ public class User implements Serializable {
                 displayName.append(suffix);
             }
             boolean first = true;
-            if (isVanish && user.vanishSeePriority > vanishUsePriority) {
+            if (vanishPlayerData.isVanish() && user.vanishSeePriority > vanishUsePriority) {
                 first = false;
                 displayName.append(Component.space());
                 displayName.append(vanishComponent);
@@ -415,5 +437,9 @@ public class User implements Serializable {
     public void unsetPermission(String permission) {
         permissions.remove(permission);
 //        permissionAttachment.unsetPermission(permission);
+    }
+
+    public VanishPlayerData getVanishPlayerData() {
+        return vanishPlayerData;
     }
 }

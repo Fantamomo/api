@@ -77,7 +77,12 @@ public class CommandSenderUser {
         return playersAreSeen().stream().map(Player::getName).toList();
     }
     public boolean canSee(Player p) {
+        if (p == null) return false;
         if (!isPlayer()) return true;
         return playersAreSeen().contains(p);
+    }
+    public boolean controlPlayerArgument(String playerName) {
+        Player target = Bukkit.getPlayerExact(playerName);
+        return canSee(target);
     }
 }

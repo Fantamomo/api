@@ -1,8 +1,10 @@
 package at.leisner.api.lang;
 
 import at.leisner.api.API;
+import at.leisner.api.user.User;
 import at.leisner.api.util.Util;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -27,6 +29,9 @@ public class Language {
         if (defaultLang == null) defaultLang = this;
         Yaml yaml = new Yaml(new Constructor(Map.class, new LoaderOptions()));
         yamlData = yaml.load(inputStream);
+    }
+    public static void sendTranslateMessage(Player player, String key, Key... values) {
+        User.of(player).sendTranslateMessage(key, values);
     }
 
     public String get(String key) {

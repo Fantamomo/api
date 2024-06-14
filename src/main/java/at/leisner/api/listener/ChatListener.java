@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 public class ChatListener implements Listener {
     private final API plugin;
@@ -30,7 +31,7 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
 
         if (user.mute != null) {
-            TextComponent component = Component.text(user.getTranslateMessage("chat.mute-error"))
+            Component component = plugin.miniMessage().deserialize(user.getTranslateMessage("chat.mute-error"))
                     .hoverEvent(HoverEvent.showText(plugin.miniMessage().deserialize(
                             user.getTranslateMessage("chat.hover.mute", Key.of("reason", user.mute)))));
             user.sendMessage(component);

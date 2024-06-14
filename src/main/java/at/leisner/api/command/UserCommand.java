@@ -20,11 +20,13 @@ public class UserCommand extends Command {
     public UserCommand(API plugin) {
         super("user");
         this.plugin = plugin;
+        setPermission("api.command.user");
     }
 
     @Override
     public boolean execute(@NotNull CommandSender senderTemp, @NotNull String alias, @NotNull String[] args) {
         CommandSenderUser sender = new CommandSenderUser(senderTemp);
+        if (!sender.controlPermission("api.command.user", "commands.user.permission_error")) return true;
         switch (args.length) {
             case 0, 1 -> {
                 sender.sendMessage("commands.user.usage", Key.of("usage", "/user <set|info> <rang|priority|language> <...>"));

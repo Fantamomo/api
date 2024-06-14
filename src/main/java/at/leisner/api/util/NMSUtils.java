@@ -3,6 +3,7 @@ package at.leisner.api.util;
 
 import at.leisner.api.API;
 import at.leisner.api.lang.Key;
+import at.leisner.api.lang.Language;
 import at.leisner.api.user.User;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -29,12 +30,15 @@ public class NMSUtils {
         serverPlayer.connection.sendPacket(ClientboundSetPlayerTeamPacket.createAddOrModifyPacket(playerTeam, true));
     }
     public static void sendRemoveFakeTeam(Player player, UUID uuid) {
+        if (!playerTeamMap.containsKey(uuid)) return;
         ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
         serverPlayer.connection.sendPacket(ClientboundSetPlayerTeamPacket.createRemovePacket(playerTeamMap.get(uuid)));
     }
     public static TextComponent addHoverEvent(TextComponent name, User user, User forUser) {
-        return name.hoverEvent(HoverEvent.showText(API.getInstance().miniMessage().deserialize(forUser.getTranslateMessage(
+        Language language = forUser == null ? Language.defaultLang : forUser.getLanguage();
+        return name.hoverEvent(HoverEvent.showText(API.getInstance().miniMessage().deserialize(language.translateWithPrefixIfAvailable(
                 "chat.hover.info",
+                false,
                 Key.of("player-name", user.getOriginalName()),
                 Key.of("player-uuid", String.valueOf(user.getPlayer().getUniqueId())),
                 Key.of("player-pos", ((int) user.getPlayer().getX()) +" "+ ((int) user.getPlayer().getY())+" "+ ((int) user.getPlayer().getZ()))

@@ -16,11 +16,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class NickCommand extends Command {
 
     private final API plugin;
     private final Language language;
+    private List<String> arg0 = new ArrayList<>(List.of(""));
 
     public NickCommand(API plugin) {
         super("nick");
@@ -31,6 +33,7 @@ public class NickCommand extends Command {
     @Override
     public boolean execute(CommandSender senderTemp, String label, String[] args) {
         CommandSenderUser sender = new CommandSenderUser(senderTemp);
+        if (!sender.controlPermission("api.command.nick", "commands.nick.permission_error")) return true;
         if (args.length == 0) {
             sender.sendMessage("commands.nick.usage", Key.of("usage", "/nick <action> <args...>"));
             return false;
@@ -208,20 +211,22 @@ public class NickCommand extends Command {
     }
 
     @Override
-    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+    public @NotNull List<String> tabComplete(@NotNull CommandSender senderTemp, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        CommandSenderUser sender = new CommandSenderUser(senderTemp);
         if (args.length == 1) {
-            List<String> completion = new ArrayList<>();
-            if (sender.hasPermission("api.command.nick.set")) completion.add("set");
-            if (sender.hasPermission("api.command.nick.list")) completion.add("list");
-            if (sender.hasPermission("api.command.nick.info")) completion.add("info");
-            if (sender.hasPermission("api.command.nick.reset")) completion.add("reset");
-            if (sender.hasPermission("api.command.nick.other_reset")) completion.add("reset");
-            if (sender.hasPermission("api.command.nick.set_other")) completion.add("set_other");
-            if (sender.hasPermission("api.command.nick.fake_rang")) completion.add("fake_rang");
-            if (sender.hasPermission("api.command.nick.random")) completion.add("random");
-            if (sender.hasPermission("api.command.nick.reload_skin")) completion.add("reload_skin");
-            if (sender.hasPermission("api.command.nick.set_skin")) completion.add("set_skin");
-            return completion.stream().filter(arg -> arg.startsWith(args[0])).toList();
+            return Stream.of("set", "list", "info", "reset", "set_other", "fake_rang", "random", "reload_skin", "set_skin").filter(arg -> sender.hasPermission("api.command.nick."+arg)).toList();
+//            List<String> completion = new ArrayList<>();
+//            if (sender.hasPermission("api.command.nick.set")) completion.add("set");
+//            if (sender.hasPermission("api.command.nick.list")) completion.add("list");
+//            if (sender.hasPermission("api.command.nick.info")) completion.add("info");
+//            if (sender.hasPermission("api.command.nick.reset")) completion.add("reset");
+//            if (sender.hasPermission("api.command.nick.other_reset")) completion.add("reset");
+//            if (sender.hasPermission("api.command.nick.set_other")) completion.add("set_other");
+//            if (sender.hasPermission("api.command.nick.fake_rang")) completion.add("fake_rang");
+//            if (sender.hasPermission("api.command.nick.random")) completion.add("random");
+//            if (sender.hasPermission("api.command.nick.reload_skin")) completion.add("reload_skin");
+//            if (sender.hasPermission("api.command.nick.set_skin")) completion.add("set_skin");
+//            return completion.stream().filter(arg -> arg.startsWith(args[0])).toList();
         }
         if (!sender.hasPermission("api.command.nick." + args[0])) return new ArrayList<>();
         switch (args[0]) {
@@ -232,14 +237,17 @@ public class NickCommand extends Command {
             case "info":
             case "set_other":
                 if (args.length > 2) return new ArrayList<>();
-                return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+                return sender.playersAreSeenName();
+//                return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             case "reset":
                 if (args.length > 2) return new ArrayList<>();
                 if (sender.hasPermission("api.command.nick.reset_other"))
-                    return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+                    return sender.playersAreSeenName();
+//                    return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             case "fake_rang":
                 if (args.length == 3) return new ArrayList<>();
-                return plugin.getRangManager().availableRanks().stream().filter(arg -> arg.startsWith(args[2])).toList();
+                return sender.playersAreSeenName();
+//                return plugin.getRangManager().availableRanks().stream().filter(arg -> arg.startsWith(args[2])).toList();
         }
         return new ArrayList<>();
     }

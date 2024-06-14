@@ -29,10 +29,9 @@ public class TellCommand extends Command {
             return true;
         }
 
-        if (senderTemp instanceof Player player) {
-            from = player.getName();
-        } else {
-            from = "SERVER";
+        if (!sender.controlPlayerArgument(args[0])) {
+            sender.sendMessage("command.player_not_found");
+            return true;
         }
 
         List<String> temp = new ArrayList<>(List.of(args));
@@ -45,12 +44,9 @@ public class TellCommand extends Command {
             return true;
         }
         User userTo = User.of(to);
-        if (userTo.getNickName() == null) {
+        if (userTo.getNickName() == null || userTo.getNickName().equals(args[0])) {
             sender.sendMessage("commands.tell.msg-send", Key.of("reviver", userTo.getDisplayNameFor(sender.player())), Key.of("msg", msg));
-            userTo.sendTranslateMessage("commands.tell.msg-revive", Key.of("sender", from), Key.of("msg", msg));
-        } else if (userTo.getNickName().equals(args[0])) {
-            sender.sendMessage("commands.tell.msg-send", Key.of("reviver", to.getName()), Key.of("msg", msg));
-            userTo.sendTranslateMessage("commands.tell.msg-revive", Key.of("sender", sender.player() == null ? "SERVER" : User.of(sender.player()).getDisplayNameFor(to)), Key.of("msg", msg));
+            userTo.sendTranslateMessage("commands.tell.msg-revive", Key.of("sender", sender.user().getDisplayNameFor(sender.player())), Key.of("msg", msg));
         } else {
             sender.sendMessage("command.player_not_found");
         }
@@ -58,9 +54,10 @@ public class TellCommand extends Command {
     }
 
     @Override
-    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+    public @NotNull List<String> tabComplete(@NotNull CommandSender senderTemp, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        CommandSenderUser sender = new CommandSenderUser(senderTemp);
         if (args.length == 1) {
-            return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+            return sender.playersAreSeenName();
         }
         return List.of();
     }

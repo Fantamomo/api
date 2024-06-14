@@ -5,16 +5,32 @@ import at.leisner.api.command.override.TellCommand;
 import at.leisner.api.lang.Language;
 import at.leisner.api.listener.ChatListener;
 import at.leisner.api.listener.JoinQuitListener;
+import at.leisner.api.listener.VanishListener;
 import at.leisner.api.nick.NickCommand;
 import at.leisner.api.nick.NickManager;
 import at.leisner.api.rang.RangManager;
 import at.leisner.api.tablist.TabListManager;
+import at.leisner.api.test.CustomBow;
+import at.leisner.api.test.EventListener;
+import at.leisner.api.test.HomingArrow;
+import at.leisner.api.test.SummonCustomEntityCommand;
 import at.leisner.api.user.User;
 import at.leisner.api.util.JsonUtil;
 import at.leisner.api.vanish.VanishCommand;
 import at.leisner.api.vanish.VanishManager;
 import com.google.gson.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.entity.vault.VaultBlockEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
@@ -50,6 +66,19 @@ public final class API extends JavaPlugin {
         loadManageFileLater();
         registerPlayers();
     }
+//    private void registerItems() {
+//        ResourceLocation bowKey = new ResourceLocation("customentity", "custom_bow");
+//        Registry.register(, bowKey, CUSTOM_BOW);
+//    }
+//
+//    private void registerEntities() {
+//        ResourceLocation arrowKey = new ResourceLocation("customentity", "homing_arrow");
+//        EntityType<HomingArrow> homingArrowType = EntityType.Builder.<HomingArrow>of(HomingArrow::new, MobCategory.MISC)
+//                .sized(0.5F, 0.5F)
+//                .build(arrowKey.toString());
+//
+//        Registry.register(, arrowKey, homingArrowType);
+//    }
 
     private void loadManageFileLater() {
         try (Reader reader = new FileReader(new File(getDataFolder(), "player.json"))) {
@@ -105,6 +134,7 @@ public final class API extends JavaPlugin {
     }
 
     private void register() {
+        vanishManager = new VanishManager(this);
         CommandMap commandMap = getServer().getCommandMap();
         commandMap.registerAll("api", List.of(
                 new NickCommand(this),
@@ -117,7 +147,8 @@ public final class API extends JavaPlugin {
                 new IgnoreCommand(this),
                 new ReportCommand(this),
                 new PlayerInfoCommand(this),
-                new VanishCommand(this)
+                new VanishCommand(this),
+                new SummonCustomEntityCommand()
         ));
 
         nickManager = new NickManager(this);
@@ -129,9 +160,10 @@ public final class API extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new ChatListener(this), this);
         pluginManager.registerEvents(new JoinQuitListener(this), this);
+        pluginManager.registerEvents(new VanishListener(this), this);
+        pluginManager.registerEvents(new EventListener(this), this);
         tabListManager = new TabListManager(this);
         tabListManager.run();
-        vanishManager = new VanishManager(this);
     }
 
     @Override
